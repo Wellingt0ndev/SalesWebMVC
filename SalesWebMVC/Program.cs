@@ -14,8 +14,12 @@ namespace SalesWebMVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<SeendingService>();
 
             var app = builder.Build();
+
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<SeendingService>().Seed();
+            
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -25,6 +29,7 @@ namespace SalesWebMVC
                 app.UseHsts();
             }
 
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
