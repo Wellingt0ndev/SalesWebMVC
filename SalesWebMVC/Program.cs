@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMVC.Data;
+using SalesWebMVC.Services;
 using System.Configuration;
 namespace SalesWebMVC
 {
@@ -15,6 +16,7 @@ namespace SalesWebMVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<SeendingService>();
+            builder.Services.AddScoped<SellerService>();
 
             var app = builder.Build();
 
