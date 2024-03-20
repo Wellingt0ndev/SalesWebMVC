@@ -18,6 +18,7 @@ namespace SalesWebMVC
             builder.Services.AddScoped<SeendingService>();
             builder.Services.AddScoped<SellerService>();
             builder.Services.AddScoped<DepartmentService>();
+            builder.Services.AddScoped<SalesRecordService>();
 
             var app = builder.Build();
 
