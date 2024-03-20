@@ -49,7 +49,7 @@ namespace SalesWebMVC.Controllers
             var obj =await _sellerService.FindByIdAsync(id.Value);
             if(obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id not found" }); ;
+                return RedirectToAction(nameof(Error), new { message = "Id not found" }); 
             }
 
             return View(obj);
@@ -59,8 +59,15 @@ namespace SalesWebMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -99,7 +106,7 @@ namespace SalesWebMVC.Controllers
         {            
             if (id != seller.Id)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id mismatch" }); ;
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" }); 
             }
             try
             {
@@ -108,7 +115,7 @@ namespace SalesWebMVC.Controllers
             }
             catch (ApplicationException e)
             {
-                return RedirectToAction(nameof(Error), new { message = e.Message }); ;
+                return RedirectToAction(nameof(Error), new { message = e.Message }); 
             }                      
         }
 
