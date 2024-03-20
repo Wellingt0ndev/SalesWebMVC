@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Localization;
 using SalesWebMVC.Data;
 using SalesWebMVC.Services;
-using System.Configuration;
+using System.Globalization;
 namespace SalesWebMVC
 {
     public class Program
@@ -11,7 +11,7 @@ namespace SalesWebMVC
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SalesWebMVCContext>(options =>
-                options.UseMySql(builder.Configuration.GetConnectionString("SalesWebMVCContext"),ServerVersion.Parse("8.3.0-mysql")));
+                options.UseMySql(builder.Configuration.GetConnectionString("SalesWebMVCContext"), ServerVersion.Parse("8.3.0-mysql")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -22,7 +22,17 @@ namespace SalesWebMVC
             var app = builder.Build();
 
             app.Services.CreateScope().ServiceProvider.GetRequiredService<SeendingService>().Seed();
-            
+           
+            // Define a locale como en-US
+            var enUs = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUs),
+                SupportedCultures = new List<CultureInfo> { enUs },
+                SupportedUICultures = new List<CultureInfo> { enUs }
+            };
+            app.UseRequestLocalization(localizationOptions);
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -32,7 +42,7 @@ namespace SalesWebMVC
                 app.UseHsts();
             }
 
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
